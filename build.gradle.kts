@@ -29,3 +29,7 @@ tasks.withType<Test> {
     useJUnitPlatform()
     jvmArgs("--enable-preview")
 }
+//Run the application with --enable-preview
+tasks.withType<JavaExec> {
+    jvmArgs("--enable-preview")
+}

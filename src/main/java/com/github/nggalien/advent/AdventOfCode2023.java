@@ -1,7 +1,6 @@
 package com.github.nggalien.advent;
 
 import java.util.Objects;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static java.lang.StringTemplate.STR;
@@ -11,30 +10,36 @@ import static java.lang.StringTemplate.STR;
  */
 public class AdventOfCode2023 {
 
+    public enum DayPart {
+        ONE, TWO
+    }
+
     /**
      * Interface representing the solution for a day's challenge.
      */
-    sealed interface SolutionOfDay permits Day1.Solution {
+    sealed interface SolutionOfDay<T> permits Day1.Solution, Day2.Solution {
         int day();
 
-        boolean solved();
+        DayPart part();
+
+        T rightAnswer();
 
         /**
          * Solve the challenge for the day.
          * @return Supplier of the answer.
          */
-        Supplier<?> solve();
+        T test();
 
-        default String solvedStatus() {
-            return solved() ? "\uD83D\uDE0E" : "\uD83D\uDE2D";
+        default String status() {
+            return test().equals(rightAnswer()) ? "\uD83D\uDE0E" : "\uD83D\uDE2D";
         }
 
         /**
          * Print the answer for the day.
          */
-        default String answer() {
+        default String message() {
             return STR."""
-                    \uD83D\uDE80 Day \{ day() } answer is \{solve().get()} \{solvedStatus()}
+                    \uD83D\uDE80 Day \{ day() } part \{part().name()}: answer is \{ test()} \{ status()}
                     """;
         }
     }
@@ -56,8 +61,8 @@ public class AdventOfCode2023 {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        Stream.of(Day1.find())
-                .map(SolutionOfDay::answer)
+        Stream.of(Day1.find(), Day2.find())
+                .map(SolutionOfDay::message)
                 .forEach(System.out::println);
     }
 }

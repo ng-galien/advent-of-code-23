@@ -1,8 +1,7 @@
 package com.github.nggalien.advent;
 
+import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.github.nggalien.advent.AdventOfCode2023.readFileOfResource;
@@ -14,17 +13,50 @@ import static com.github.nggalien.advent.AdventOfCode2023.readFileOfResource;
  */
 public interface Day1 {
 
+    Map<String, Integer> digitsAsString = Map.of(
+            "one", 1,
+            "two", 2,
+            "three", 3,
+            "four", 4,
+            "five", 5,
+            "six", 6,
+            "seven", 7,
+            "eight", 8,
+            "nine", 9
+    );
+
+    Map<String, Integer> reverseDigitsAsString = Map.of(
+            "eno", 1,
+            "owt", 2,
+            "eerht", 3,
+            "ruof", 4,
+            "evif", 5,
+            "xis", 6,
+            "neves", 7,
+            "thgie", 8,
+            "enin", 9
+    );
+
+    /**
+     * Record to hold the index and digit of a found digit.
+     */
+    record Found(int index, int digit) {
+        public static Found of(int index, int digit) {
+            return new Found(index, digit);
+        }
+    }
+
     /**
      * Record to hold two integers and combine them into a two-digit number.
      */
-    record TwoNumbers(int first, int second) {
+    record TwoNumbers(Found first, Found second) {
 
         /**
          * Combines the two numbers into a single two-digit integer.
          * @return Combined two-digit number.
          */
         public int combine() {
-            return first * 10 + second;
+            return first.digit() * 10 + second.digit();
         }
     }
 
@@ -33,20 +65,31 @@ public interface Day1 {
      * @param line The string to be reversed.
      * @return IntStream of reversed Unicode code points.
      */
-    default IntStream reverse(String line) {
-        return IntStream.rangeClosed(1, line.length())
-                .map(i -> line.codePointAt(line.length() - i));
+    default String reverse(String line) {
+        return new StringBuilder(line).reverse().toString();
     }
 
+
     /**
-     * Finds the first digit in a stream of integers.
-     * @param stream The stream of integers.
-     * @return Optional containing the first digit, if found.
+     * Finds the first digit as a number or as a string and returns the first one found.
+     * @param line The string to search for digits.
+     * @return Optional of Found digit.
      */
-    default Optional<Integer> findFirstDigit(IntStream stream) {
-        return stream.filter(Character::isDigit)
+    default Optional<Found> findFirstDigit(String line, Map<String, Integer> digitsMap) {
+        Optional<Found> foundDigitAsString = digitsMap.entrySet().stream()
+                .filter(entry -> line.contains(entry.getKey()))
+                .map(entry -> Found.of(line.indexOf(entry.getKey()), entry.getValue()))
+                .reduce((first, second) -> first.index() < second.index() ? first : second);
+
+        Optional<Found> foundDigitAsNumber = line.chars()
+                .filter(Character::isDigit)
                 .mapToObj(Character::getNumericValue)
+                .map(digit -> Found.of(line.indexOf(String.valueOf(digit)), digit))
                 .findFirst();
+
+        return Stream.of(foundDigitAsString, foundDigitAsNumber)
+                .flatMap(Optional::stream)
+                .reduce((first, second) -> first.index() < second.index() ? first : second);
     }
 
     /**
@@ -55,8 +98,8 @@ public interface Day1 {
      * @return Stream of TwoNumbers found in the string.
      */
     default Stream<TwoNumbers> findTwoNumbers(String line) {
-        return findFirstDigit(line.chars())
-                .flatMap(first -> findFirstDigit(reverse(line))
+        return findFirstDigit(line, digitsAsString)
+                .flatMap(first -> findFirstDigit(reverse(line), reverseDigitsAsString)
                         .map(second -> new TwoNumbers(first, second)))
                 .stream();
     }
@@ -71,23 +114,26 @@ public interface Day1 {
         return input.lines().flatMap(this::findTwoNumbers).mapToInt(TwoNumbers::combine).sum();
     }
 
-    record Solution() implements Day1, AdventOfCode2023.SolutionOfDay {
+    record Solution() implements Day1, AdventOfCode2023.SolutionOfDay<Integer> {
         @Override
         public int day() {
             return 1;
         }
 
         @Override
-        public boolean solved() {
-            return true;
+        public AdventOfCode2023.DayPart part() {
+            return AdventOfCode2023.DayPart.TWO;
         }
 
         @Override
-        public Supplier<?> solve() {
-            return () -> {
-                String input = readFileOfResource("day1.txt");
-                return sumOfAllCalibrationValues(input);
-            };
+        public Integer rightAnswer() {
+            return 55260;
+        }
+
+        @Override
+        public Integer test() {
+            String input = readFileOfResource("day1.txt");
+            return sumOfAllCalibrationValues(input);
         }
     }
 
