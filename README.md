@@ -62,7 +62,7 @@ In this example, the calibration values are 29, 83, 13, 24, 42, 14, and 76. Addi
 
 What is the sum of all of the calibration values?
 
->Solution: [here](./src/main/java/com/github/nggalien/advant/Day1.java)
+> Solution: [here](./src/main/java/com/github/nggalien/advent/Day1.java)
 
 ## Day 2: Cube Conundrum
 
@@ -92,5 +92,7 @@ The Elf would first like to know which games would have been possible if the bag
 In the example above, games 1, 2, and 5 would have been possible if the bag had been loaded with that configuration. However, game 3 would have been impossible because at one point the Elf showed you 20 red cubes at once; similarly, game 4 would also have been impossible because the Elf showed you 15 blue cubes at once. If you add up the IDs of the games that would have been possible, you get 8.
 
 Determine which games would have been possible if the bag had been loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
+
+> Solution: [here](./src/main/java/com/github/nggalien/advent/Day2.java)
 
 ### Part 2

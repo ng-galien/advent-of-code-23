@@ -27,7 +27,7 @@ import static com.github.nggalien.advent.AdventOfCode2023.readFileOfResource;
  Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
  Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
  Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
- In game 1, three sets of cubes are revealed from the bag (and then put back again). The first set is 3 blue cubes and 4 red cubes; the second set is 1 red cube, 2 green cubes, and 6 blue cubes; the third set is only 2 green cubes.
+ In game 1, three cubes of cubes are revealed from the bag (and then put back again). The first set is 3 blue cubes and 4 red cubes; the second set is 1 red cube, 2 green cubes, and 6 blue cubes; the third set is only 2 green cubes.
 
  The Elf would first like to know which games would have been possible if the bag contained only 12 red cubes, 13 green cubes, and 14 blue cubes?
 
@@ -59,6 +59,13 @@ public interface Day2 {
     }
 
     record Cube(String color) {
+
+        public Cube {
+            if (color == null || color.isBlank()) {
+                throw new IllegalArgumentException("Color cannot be blank");
+            }
+        }
+
         public static Cube of(String red) {
             return new Cube(red);
         }
@@ -75,7 +82,7 @@ public interface Day2 {
         }
     }
 
-    record Hand(Collection<CubesOfColor> sets) {
+    record Hand(Collection<CubesOfColor> cubes) {
         static Hand parse(String input) {
             return new Hand(Stream.of(input.split(","))
                     .map(String::trim)
@@ -102,13 +109,6 @@ public interface Day2 {
             this(new HashMap<>());
         }
 
-        void parse(String hand) {
-            Stream.of(hand.split(","))
-                    .map(String::trim)
-                    .map(CubesOfColor::parse)
-                    .forEach(this::add);
-        }
-
         void add(CubesOfColor set) {
             cubes.compute(set.cube(), (cube, quantity) -> Optional.ofNullable(quantity)
                     .map(q -> q.add(set.quantity()))
@@ -124,21 +124,26 @@ public interface Day2 {
         }
 
         boolean canPick(Hand hand) {
-            return hand.sets().stream().allMatch(this::canPick);
+            return hand.cubes().stream().allMatch(this::canPick);
         }
 
         boolean canPick(Game game) {
             return game.hands().stream().allMatch(this::canPick);
         }
+
+        static CubeRepository parse(String hand) {
+            CubeRepository repository = new CubeRepository();
+            Stream.of(hand.split(","))
+                    .map(String::trim)
+                    .map(CubesOfColor::parse)
+                    .forEach(repository::add);
+            return repository;
+        }
     }
 
 
     default int sumOfAllPlayableGamesNumber(String hand, String games) {
-        CubeRepository repository = new CubeRepository();
-        Stream.of(hand.split(","))
-                .map(String::trim)
-                .map(CubesOfColor::parse)
-                .forEach(repository::add);
+        CubeRepository repository = CubeRepository.parse(hand);
         Collection<Game> gamesToPlay = Stream.of(games.split("\n"))
                 .map(String::trim)
                 .map(Game::parse)

@@ -14,7 +14,6 @@ class Day2Test {
                 12 red, 13 green, 14 blue
                 """;
 
-        Day2.CubeRepository repository = new Day2.CubeRepository();
         var tooManyRed = Day2.CubesOfColor.of(Day2.Cube.of("red"), Day2.Quantity.of(13));
         var tooManyGreen = Day2.CubesOfColor.of(Day2.Cube.of("green"), Day2.Quantity.of(14));
         var tooManyBlue = Day2.CubesOfColor.of(Day2.Cube.of("blue"), Day2.Quantity.of(15));
@@ -45,7 +44,7 @@ class Day2Test {
                 """;
 
         //When
-        repository.parse(hand);
+        Day2.CubeRepository repository = Day2.CubeRepository.parse(hand);
         //Then
         assertEquals(Day2.Quantity.of(12), repository.quantityOf(Day2.Cube.of("red")), "Quantity of red cube should be 12");
         assertEquals(Day2.Quantity.of(13), repository.quantityOf(Day2.Cube.of("green")), "Quantity of green cube should be 13");
