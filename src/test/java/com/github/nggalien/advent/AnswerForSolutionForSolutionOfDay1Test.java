@@ -1,4 +1,4 @@
-package com.github.nggalien.advant;
+package com.github.nggalien.advent;
 
 import org.junit.jupiter.api.Test;
 

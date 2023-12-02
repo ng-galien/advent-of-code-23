@@ -1,11 +1,11 @@
-package com.github.nggalien.advant;
+package com.github.nggalien.advent;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.github.nggalien.advant.AdventOfCode2023.readFileOfResource;
+import static com.github.nggalien.advent.AdventOfCode2023.readFileOfResource;
 
 /**
  * Interface representing the solution for "Day 1: Trebuchet?!" challenge.

@@ -1,4 +1,4 @@
-package com.github.nggalien.advant;
+package com.github.nggalien.advent;
 
 import java.util.Objects;
 import java.util.function.Supplier;
