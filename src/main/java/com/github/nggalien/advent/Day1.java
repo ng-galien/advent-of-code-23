@@ -63,7 +63,7 @@ public interface Day1 {
     /**
      * Reverses the characters in the string and returns their Unicode code points as an IntStream.
      * @param line The string to be reversed.
-     * @return IntStream of reversed Unicode code points.
+     * @return String with reversed characters.
      */
     default String reverse(String line) {
         return new StringBuilder(line).reverse().toString();
