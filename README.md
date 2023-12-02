@@ -1,5 +1,7 @@
 # My Advent of Code 2023
 
+![example workflow](https://github.com/ng-galien/advent-of-code-23/actions/workflows/gradle.yml/badge.svg)
+
 ### Summary
 
 [Advent of Code](https://adventofcode.com/) is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like.
