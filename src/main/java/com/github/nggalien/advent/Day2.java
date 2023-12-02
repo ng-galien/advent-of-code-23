@@ -78,11 +78,21 @@ public interface Day2 {
 
         static CubesOfColor parse(String input) {
             String[] parts = input.split(" ");
+            if (parts.length != 2) {
+                throw new IllegalArgumentException("Invalid cube input");
+            }
             return CubesOfColor.of(new Cube(parts[1]), Quantity.of(Integer.parseInt(parts[0])));
         }
     }
 
     record Hand(Collection<CubesOfColor> cubes) {
+
+        public Hand {
+            if (cubes == null || cubes.isEmpty()) {
+                throw new IllegalArgumentException("Hand cannot be empty");
+            }
+        }
+
         static Hand parse(String input) {
             return new Hand(Stream.of(input.split(","))
                     .map(String::trim)
@@ -92,9 +102,29 @@ public interface Day2 {
     }
 
     record Game(int id, Collection<Hand> hands) {
+
+        public Game {
+            if (hands == null || hands.isEmpty()) {
+                throw new IllegalArgumentException("Game cannot be empty");
+            }
+        }
+
         static Game parse(String input) {
             String[] parts = input.split(":");
-            int id = Integer.parseInt(parts[0].split(" ")[1]);
+            if (parts.length != 2) {
+                throw new IllegalArgumentException("Invalid game input");
+            }
+            String[] gameIdentifiers = parts[0].split(" ");
+            if (gameIdentifiers.length != 2) {
+                throw new IllegalArgumentException("Invalid game identifier");
+            }
+            if(!gameIdentifiers[0].equals("Game")) {
+                throw new IllegalArgumentException("Invalid game identifier");
+            }
+            if (!gameIdentifiers[1].matches("\\d+")) {
+                throw new IllegalArgumentException("Invalid game identifier");
+            }
+            int id = Integer.parseInt(gameIdentifiers[1]);
             Collection<Hand> handList = Stream.of(parts[1].split(";"))
                     .map(String::trim)
                     .map(Hand::parse)
@@ -110,7 +140,7 @@ public interface Day2 {
         }
 
         void add(CubesOfColor set) {
-            cubes.compute(set.cube(), (cube, quantity) -> Optional.ofNullable(quantity)
+            cubes.compute(set.cube(), (_, quantity) -> Optional.ofNullable(quantity)
                     .map(q -> q.add(set.quantity()))
                     .orElse(set.quantity()));
         }
