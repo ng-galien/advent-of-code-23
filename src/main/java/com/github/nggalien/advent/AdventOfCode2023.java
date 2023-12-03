@@ -17,7 +17,7 @@ public class AdventOfCode2023 {
     /**
      * Interface representing the solution for a day's challenge.
      */
-    sealed interface SolutionOfDay<T> permits Day1.Solution, Day2.part1, Day2.part2 {
+    sealed interface SolutionOfDay<T> permits Day1.Solution, Day2.Part1, Day2.Part2 {
         int day();
 
         DayPart part();

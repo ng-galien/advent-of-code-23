@@ -9,34 +9,16 @@ import java.util.stream.Stream;
 import static com.github.nggalien.advent.AdventOfCode2023.readFileOfResource;
 
 /**
- --- Day 2: Cube Conundrum ---
- You're launched high into the atmosphere! The apex of your trajectory just barely reaches the surface of a large island floating in the sky. You gently land in a fluffy pile of leaves. It's quite cold, but you don't see much snow. An Elf runs over to greet you.
-
- The Elf explains that you've arrived at Snow Island and apologizes for the lack of snow. He'll be happy to explain the situation, but it's a bit of a walk, so you have some time. They don't get many visitors up here; would you like to play a game in the meantime?
-
- As you walk, the Elf shows you a small bag and some cubes which are either red, green, or blue. Each time you play this game, he will hide a secret number of cubes of each color in the bag, and your goal is to figure out information about the number of cubes.
-
- To get information, once a bag has been loaded with cubes, the Elf will reach into the bag, grab a handful of random cubes, show them to you, and then put them back in the bag. He'll do this a few times per game.
-
- You play several games and record the information from each game (your puzzle input). Each game is listed with its ID number (like the 11 in Game 11: ...) followed by a semicolon-separated list of subsets of cubes that were revealed from the bag (like 3 red, 5 green, 4 blue).
-
- For example, the record of a few games might look like this:
-
- Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
- Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
- Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
- Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
- Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
- In game 1, three cubes of cubes are revealed from the bag (and then put back again). The first set is 3 blue cubes and 4 red cubes; the second set is 1 red cube, 2 green cubes, and 6 blue cubes; the third set is only 2 green cubes.
-
- The Elf would first like to know which games would have been possible if the bag contained only 12 red cubes, 13 green cubes, and 14 blue cubes?
-
- In the example above, games 1, 2, and 5 would have been possible if the bag had been loaded with that configuration. However, game 3 would have been impossible because at one point the Elf showed you 20 red cubes at once; similarly, game 4 would also have been impossible because the Elf showed you 15 blue cubes at once. If you add up the IDs of the games that would have been possible, you get 8.
-
- Determine which games would have been possible if the bag had been loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
+ * The `Day2` interface is part of a series of solutions for "Advent of Code 2023".
+ * This particular interface deals with a puzzle named "Cube Conundrum" which involves a series
+ * of games with colored cubes. The objective is to determine the possible games based on the
+ * number of cubes and calculate the power of cube sets.
  */
 public interface Day2 {
 
+    /**
+     * Represents a non-negative quantity of items.
+     */
     record Quantity(int value) {
 
         public Quantity {
@@ -58,6 +40,9 @@ public interface Day2 {
         }
     }
 
+    /**
+     * Represents a cube with a non-blank color attribute.
+     */
     record Cube(String color) {
 
         public Cube {
@@ -71,6 +56,9 @@ public interface Day2 {
         }
     }
 
+    /**
+     * Represents a set of cubes of a certain color and quantity.
+     */
     record CubesOfColor(Cube cube, Quantity quantity) {
 
         int powerOfCubes() {
@@ -90,6 +78,9 @@ public interface Day2 {
         }
     }
 
+    /**
+     * Represents a collection of `CubesOfColor`.
+     */
     record Hand(Collection<CubesOfColor> cubes) {
 
         public Hand {
@@ -106,6 +97,9 @@ public interface Day2 {
         }
     }
 
+    /**
+     * Represents a game with an ID and a collection of `Hand`.
+     */
     record Game(int id, Collection<Hand> hands) {
 
         public Game {
@@ -138,6 +132,10 @@ public interface Day2 {
         }
     }
 
+    /**
+     * Manages a collection of cubes, supporting various operations like adding cubes,
+     * checking if a certain quantity of cubes can be picked, etc.
+     */
     record CubeRepository(Map<Cube, Quantity> cubes) {
 
         public CubeRepository() {
@@ -197,7 +195,9 @@ public interface Day2 {
         }
     }
 
-
+    /**
+     * Determines the sum of the IDs of all playable games based on a given hand and set of games.
+     */
     default int sumOfAllPlayableGamesNumber(String hand, String games) {
         CubeRepository repository = CubeRepository.parse(hand);
         Collection<Game> gamesToPlay = parse(games);
@@ -208,6 +208,9 @@ public interface Day2 {
 
     }
 
+    /**
+     * Calculates the power of a given game.
+     */
     default long powerOfGame(Game game) {
         CubeRepository repository = new CubeRepository();
         repository.addMissingToFill(game);
@@ -216,7 +219,10 @@ public interface Day2 {
                 .reduce(1, (first, second) -> first * second);
     }
 
-    default long powerOfTheAllGame(String games) {
+    /**
+     * Calculates the total power of all games.
+     */
+    default long powerOffAllGames(String games) {
 
         Collection<Game> gamesToPlay = parse(games);
         return gamesToPlay.stream().
@@ -224,6 +230,9 @@ public interface Day2 {
                 .sum();
     }
 
+    /**
+     * Parses a string input into a collection of `Game` objects.
+     */
     static Collection<Game> parse(String input) {
         return Stream.of(input.split("\n"))
                 .map(String::trim)
@@ -231,7 +240,10 @@ public interface Day2 {
                 .toList();
     }
 
-    record part1() implements Day2, AdventOfCode2023.SolutionOfDay<Integer> {
+    /**
+     * Implements the `Day2` interface and `AdventOfCode2023.SolutionOfDay` for part one of the puzzle.
+     */
+    record Part1() implements Day2, AdventOfCode2023.SolutionOfDay<Integer> {
         @Override
         public int day() {
             return 2;
@@ -257,7 +269,10 @@ public interface Day2 {
         }
     }
 
-    record part2() implements Day2, AdventOfCode2023.SolutionOfDay<Long> {
+    /**
+     * Implements the `Day2` interface and `AdventOfCode2023.SolutionOfDay` for part two of the puzzle.
+     */
+    record Part2() implements Day2, AdventOfCode2023.SolutionOfDay<Long> {
         @Override
         public int day() {
             return 2;
@@ -276,16 +291,22 @@ public interface Day2 {
         @Override
         public Long test() {
             String games = readFileOfResource("day2.txt");
-            return powerOfTheAllGame(games);
+            return powerOffAllGames(games);
         }
     }
 
-    static part1 findPart1() {
-        return new part1();
+    /**
+     * Returns an instance of `part1`.
+     */
+    static Part1 findPart1() {
+        return new Part1();
     }
 
-    static part2 findPart2() {
-        return new part2();
+    /**
+     * Returns an instance of `part2`.
+     */
+    static Part2 findPart2() {
+        return new Part2();
     }
 
 }

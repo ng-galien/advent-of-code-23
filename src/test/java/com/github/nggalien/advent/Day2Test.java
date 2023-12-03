@@ -79,7 +79,7 @@ class Day2Test {
     void testPowerOfTheRepository(String game, long expected) {
         //When
         Day2 day2 = new Day2() {};
-        long power = day2.powerOfTheAllGame(game);
+        long power = day2.powerOffAllGames(game);
         //Then
         assertEquals(expected, power, "Power of the game should be " + expected);
     }
@@ -112,7 +112,7 @@ class Day2Test {
         long expectedPowerOfAllGames = 2286;
         //When
         int sum = day2.sumOfAllPlayableGamesNumber(hand, games);
-        long power = day2.powerOfTheAllGame(games);
+        long power = day2.powerOffAllGames(games);
         //Then
         assertEquals(expectedSumOfAllPlayableGamesNumber, sum, "Sum of all playable games number should be " + expectedSumOfAllPlayableGamesNumber);
         assertEquals(expectedPowerOfAllGames, power, "Power of all games should be " + expectedPowerOfAllGames);
@@ -121,7 +121,7 @@ class Day2Test {
     @Test
     void testPart1() {
         //Given
-        Day2.part1 part1 = Day2.findPart1();
+        Day2.Part1 part1 = Day2.findPart1();
         int rightAnswer = part1.rightAnswer();
         //When
         int test = part1.test();
@@ -132,7 +132,7 @@ class Day2Test {
     @Test
     void testPart2() {
         //Given
-        Day2.part2 part2 = Day2.findPart2();
+        Day2.Part2 part2 = Day2.findPart2();
         long rightAnswer = part2.rightAnswer();
         //When
         long test = part2.test();

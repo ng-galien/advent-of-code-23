@@ -2,6 +2,12 @@
 
 ![example workflow](https://github.com/ng-galien/advent-of-code-23/actions/workflows/gradle.yml/badge.svg)
 
+An iterative 🤣 approach to solving the Advent of Code 2023 puzzles. 
+
+Each puzzle is also a good candidate for a Kata experimenting with new `Java 21` 🚀 features. 
+
+Obviously, `Copilot` is ~~not~~ allowed to help for ~~figuring out~~ writing the solution and `ChatGPT-4` is ~~not~~ allowed to help writing the documentation 😇.
+
 ### Summary
 
 [Advent of Code](https://adventofcode.com/) is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like.
@@ -15,7 +21,7 @@
   - [X] [Part 2](#part-2)
 * **Day 2**: [Cube Conundrum](#day-2-cube-conundrum)
   - [X] [Part 1](#part-1-1)
-  - [ ] [Part 2](#part-2-1)
+  - [X] [Part 2](#part-2-1)
 
 ## Day 1: Trebuchet?!
 
@@ -121,5 +127,4 @@ The power of a set of cubes is equal to the numbers of red, green, and blue cube
 The power of the minimum set of cubes in game 1 is `48`. In games 2-5 it was `12`, `1560`, `630`, and `36`, respectively. Adding up these five powers produces the sum `2286`.
 
 For each game, find the minimum set of cubes that must have been present. What is the sum of the power of these sets?
-
-> Solution: [here](./src/main/java/com/github/nggalien/advent/Day2.java)
+> [Documentation](./day2.md) | [Code](./src/main/java/com/github/nggalien/advent/Day2.java)
