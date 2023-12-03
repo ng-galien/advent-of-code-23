@@ -1,6 +1,11 @@
 package com.github.nggalien.advent;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,8 +74,28 @@ class Day2Test {
         assertTrue(repository.canPick(Day2.Game.parse(enoughBlue)), "Should be able to pick game with enough blue cubes");
     }
 
+    @ParameterizedTest
+    @MethodSource("provideInputAndExpectedResult")
+    void testPowerOfTheRepository(String game, long expected) {
+        //When
+        Day2 day2 = new Day2() {};
+        long power = day2.powerOfTheAllGame(game);
+        //Then
+        assertEquals(expected, power, "Power of the game should be " + expected);
+    }
+
+    static Stream<Arguments> provideInputAndExpectedResult() {
+        return Stream.of(
+                Arguments.of("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green", 48),
+                Arguments.of("Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue", 12),
+                Arguments.of("Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red", 1560),
+                Arguments.of("Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red", 630),
+                Arguments.of("Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green", 36)
+        );
+    }
+
     @Test
-    void givenExpectedResult_sumOfAllPlayableGamesNumber_thenResultIsSameAsExpected() {
+    void givenHand_whenTestAllDayTest_ThenResultIsOk() {
         //Given
         Day2 day2 = new Day2() {};
         String hand = """
@@ -83,22 +108,35 @@ class Day2Test {
                 Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
                 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
                 """;
-        int expected = 8;
+        int expectedSumOfAllPlayableGamesNumber = 8;
+        long expectedPowerOfAllGames = 2286;
         //When
         int sum = day2.sumOfAllPlayableGamesNumber(hand, games);
+        long power = day2.powerOfTheAllGame(games);
         //Then
-        assertEquals(expected, sum, "Sum of all playable games number should be " + expected);
+        assertEquals(expectedSumOfAllPlayableGamesNumber, sum, "Sum of all playable games number should be " + expectedSumOfAllPlayableGamesNumber);
+        assertEquals(expectedPowerOfAllGames, power, "Power of all games should be " + expectedPowerOfAllGames);
     }
 
     @Test
-    void testOfSolution() {
+    void testPart1() {
         //Given
-        Day2.Solution solution = new Day2.Solution();
-        int rightAnswer = solution.rightAnswer();
+        Day2.part1 part1 = Day2.findPart1();
+        int rightAnswer = part1.rightAnswer();
         //When
-        int test = solution.test();
+        int test = part1.test();
         //Then
         assertEquals(rightAnswer, test, "Test should be " + rightAnswer);
     }
 
+    @Test
+    void testPart2() {
+        //Given
+        Day2.part2 part2 = Day2.findPart2();
+        long rightAnswer = part2.rightAnswer();
+        //When
+        long test = part2.test();
+        //Then
+        assertEquals(rightAnswer, test, "Test should be " + rightAnswer);
+    }
 }

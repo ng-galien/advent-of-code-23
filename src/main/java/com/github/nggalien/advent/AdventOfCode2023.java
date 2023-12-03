@@ -17,7 +17,7 @@ public class AdventOfCode2023 {
     /**
      * Interface representing the solution for a day's challenge.
      */
-    sealed interface SolutionOfDay<T> permits Day1.Solution, Day2.Solution {
+    sealed interface SolutionOfDay<T> permits Day1.Solution, Day2.part1, Day2.part2 {
         int day();
 
         DayPart part();
@@ -61,7 +61,7 @@ public class AdventOfCode2023 {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        Stream.of(Day1.find(), Day2.find())
+        Stream.of(Day1.find(), Day2.findPart1(), Day2.findPart2())
                 .map(SolutionOfDay::message)
                 .forEach(System.out::println);
     }

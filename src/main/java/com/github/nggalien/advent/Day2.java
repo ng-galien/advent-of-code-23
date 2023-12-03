@@ -72,6 +72,11 @@ public interface Day2 {
     }
 
     record CubesOfColor(Cube cube, Quantity quantity) {
+
+        int powerOfCubes() {
+            return quantity.value();
+        }
+
         static CubesOfColor of(Cube cube, Quantity quantity) {
             return new CubesOfColor(cube, quantity);
         }
@@ -145,6 +150,21 @@ public interface Day2 {
                     .orElse(set.quantity()));
         }
 
+        void addMissingToFill(CubesOfColor set) {
+            var existing = Optional.ofNullable(cubes.get(set.cube())).orElse(Quantity.of(0));
+            if(existing.isLessThan(set.quantity())) {
+                cubes.put(set.cube(), set.quantity());
+            }
+        }
+
+        void addMissingToFill(Hand hand) {
+            hand.cubes().forEach(this::addMissingToFill);
+        }
+
+        void addMissingToFill(Game game) {
+            game.hands().forEach(this::addMissingToFill);
+        }
+
         Quantity quantityOf(Cube cube) {
             return Optional.ofNullable(cubes.get(cube)).orElse(Quantity.of(0));
         }
@@ -161,6 +181,12 @@ public interface Day2 {
             return game.hands().stream().allMatch(this::canPick);
         }
 
+        Collection<CubesOfColor> cubesForColor() {
+            return cubes.entrySet().stream()
+                    .map(entry -> CubesOfColor.of(entry.getKey(), entry.getValue()))
+                    .toList();
+        }
+
         static CubeRepository parse(String hand) {
             CubeRepository repository = new CubeRepository();
             Stream.of(hand.split(","))
@@ -174,17 +200,38 @@ public interface Day2 {
 
     default int sumOfAllPlayableGamesNumber(String hand, String games) {
         CubeRepository repository = CubeRepository.parse(hand);
-        Collection<Game> gamesToPlay = Stream.of(games.split("\n"))
-                .map(String::trim)
-                .map(Game::parse)
-                .toList();
+        Collection<Game> gamesToPlay = parse(games);
         return gamesToPlay.stream()
                 .filter(repository::canPick)
                 .mapToInt(Game::id)
                 .sum();
+
     }
 
-    record Solution() implements Day2, AdventOfCode2023.SolutionOfDay<Integer> {
+    default long powerOfGame(Game game) {
+        CubeRepository repository = new CubeRepository();
+        repository.addMissingToFill(game);
+        return repository.cubesForColor().stream()
+                .map(CubesOfColor::powerOfCubes)
+                .reduce(1, (first, second) -> first * second);
+    }
+
+    default long powerOfTheAllGame(String games) {
+
+        Collection<Game> gamesToPlay = parse(games);
+        return gamesToPlay.stream().
+                mapToLong(this::powerOfGame)
+                .sum();
+    }
+
+    static Collection<Game> parse(String input) {
+        return Stream.of(input.split("\n"))
+                .map(String::trim)
+                .map(Game::parse)
+                .toList();
+    }
+
+    record part1() implements Day2, AdventOfCode2023.SolutionOfDay<Integer> {
         @Override
         public int day() {
             return 2;
@@ -205,12 +252,40 @@ public interface Day2 {
             String hand = """
                 12 red, 13 green, 14 blue
                 """;
-            String game = readFileOfResource("day2.txt");
-            return sumOfAllPlayableGamesNumber(hand, game);
+            String games = readFileOfResource("day2.txt");
+            return sumOfAllPlayableGamesNumber(hand, games);
         }
     }
 
-    static Solution find() {
-        return new Solution();
+    record part2() implements Day2, AdventOfCode2023.SolutionOfDay<Long> {
+        @Override
+        public int day() {
+            return 2;
+        }
+
+        @Override
+        public AdventOfCode2023.DayPart part() {
+            return AdventOfCode2023.DayPart.TWO;
+        }
+
+        @Override
+        public Long rightAnswer() {
+            return 84538L;
+        }
+
+        @Override
+        public Long test() {
+            String games = readFileOfResource("day2.txt");
+            return powerOfTheAllGame(games);
+        }
     }
+
+    static part1 findPart1() {
+        return new part1();
+    }
+
+    static part2 findPart2() {
+        return new part2();
+    }
+
 }
