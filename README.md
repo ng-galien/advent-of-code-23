@@ -23,8 +23,8 @@ Obviously, `Copilot` is ~~not~~ allowed to help for ~~figuring out~~ writing the
   - [X] [Part 1](#part-1-1)
   - [X] [Part 2](#part-2-1)
 * **Day 3**: [Gear Ratios](#day-3-gear-ratios)
-- [X] [Part 1](#part-1-2)
-- [X] [Part 2](#part-2-2)
+  - [X] [Part 1](#part-1-2)
+  - [X] [Part 2](#part-2-2)
 
 ## Day 1: Trebuchet?!
 
