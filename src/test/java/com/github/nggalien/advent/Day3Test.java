@@ -13,17 +13,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class Day3Test {
 
     @ParameterizedTest
-    @MethodSource("testMotorPartsSum")
-    void testMotorPartsSum(String input, long expected) {
+    @MethodSource("day3Args")
+    void testDay3(String input, long sumOfPartNumbers, long sumGearRatio) {
         //Given
         Motor motor = Motor.of(input);
         //When
-        long sum = motor.sumOfAllPartNumbers();
+        long partNumbers = motor.sumOfAllPartNumbers();
         //Then
-        assertEquals(expected, sum, "Sum of all part numbers should be " + expected);
+        assertEquals(sumOfPartNumbers, partNumbers, "Sum of all part numbers should be " + sumOfPartNumbers);
+        //When
+        long gearRatio = motor.sumOfAllGearRatios();
+        //Then
+        assertEquals(sumGearRatio, gearRatio, "Sum of all gear ratios should be " + sumGearRatio);
     }
 
-    static Stream<Arguments> testMotorPartsSum() {
+    static Stream<Arguments> day3Args() {
         return Stream.of(
                 Arguments.of("""
                         467..114..
@@ -36,8 +40,8 @@ class Day3Test {
                         ......755.
                         ...$.*....
                         .664.598..
-                        """, 4361L),
-                Arguments.of(readFileOfResource("day3.txt"), 537732L)
+                        """, 4361L, 467835L),
+                Arguments.of(readFileOfResource("day3.txt"), 537732L, 84883664L)
         );
     }
 }
