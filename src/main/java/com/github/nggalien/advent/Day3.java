@@ -68,7 +68,7 @@ public interface Day3 {
          * @return a new zone that is the same as this zone, but with the top left and bottom right
          * coordinates moved outwards by the given amount
          */
-        Zone inflate(int amount) {
+        Zone inflate(int  amount) {
             int minX = Math.max(0, topLeft().x() - amount);
             int minY = Math.max(0, topLeft().y() - amount);
             int maxX = bottomRight().x() + amount;
