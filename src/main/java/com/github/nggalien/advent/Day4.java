@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.github.nggalien.advent.AdventOfCode2023.readFileOfResource;
+
 
 public interface Day4 {
 
@@ -113,12 +115,14 @@ public interface Day4 {
 
         @Override
         public Long rightAnswer() {
-            return 286L;
+            return 19855L;
         }
 
         @Override
         public Long test() {
-            return 537732L;
+            var input = readFileOfResource("day4.txt");
+            Day4.Game game = Day4.parseGame(input);
+            return game.score();
         }
     }
 
@@ -129,7 +133,7 @@ public interface Day4 {
 
         @Override
         public int day() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -139,12 +143,14 @@ public interface Day4 {
 
         @Override
         public Long rightAnswer() {
-            return 363L;
+            return 10378710L;
         }
 
         @Override
         public Long test() {
-            return 84883664L;
+            var input = readFileOfResource("day4.txt");
+            Day4.Game game = Day4.parseGame(input);
+            return game.copiesWin();
         }
     }
 
