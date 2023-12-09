@@ -25,6 +25,18 @@ Obviously, `Copilot` is ~~not~~ allowed to help for ~~figuring out~~ writing the
 * **Day 3**: [Gear Ratios](#day-3-gear-ratios)
   - [X] [Part 1](#part-1-2)
   - [X] [Part 2](#part-2-2)
+* **Day 4**: [The Great Escape](#day-4-the-great-escape)
+  - [X] [Part 1](#part-1-3)
+  - [X] [Part 2](#part-2-3)
+* **Day 5**: [If You Give A Seed A Fertilizer](#day-5-if-you-give-a-seed-a-fertilizer)
+  - [X] [Part 1](#part-1-4)
+  - [X] [Part 2](#part-2-4)
+* **Day 6**: [Wait For It](#day-6-wait-for-it)
+  - [X] [Part 1](#part-1-5)
+  - [X] [Part 2](#part-2-5)
+* **Day 7**: [Camel Cards](#day-7-camel-cards)
+  - [X] [Part 1](#part-1-6)
+  - [ ] [Part 2](#part-2-6)
 
 ## Day 1: Trebuchet?!
 

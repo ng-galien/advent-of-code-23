@@ -17,7 +17,7 @@ public class AdventOfCode2023 {
     /**
      * Interface representing the solution for a day's challenge.
      */
-    sealed interface SolutionOfDay<T> permits Day1.Solution, Day2.Part1, Day2.Part2, Day3.Part1, Day3.Part2, Day4.Part1, Day4.Part2, Day5.Part1, Day5.Part2, Day6.Part1, Day6.Part2 {
+    sealed interface SolutionOfDay<T> permits Day1.Solution, Day2.Part1, Day2.Part2, Day3.Part1, Day3.Part2, Day4.Part1, Day4.Part2, Day5.Part1, Day5.Part2, Day6.Part1, Day6.Part2, Day7.Part1, Day7.Part2 {
         int day();
 
         DayPart part();
@@ -39,7 +39,7 @@ public class AdventOfCode2023 {
          */
         default String message() {
             return STR."""
-                    \uD83D\uDE80 Day \{ day() } part \{part().name()}: answer is \{ test()} \{ status()}
+                    \uD83D\uDE80 Day \{day() } part \{part().name()}: answer is \{ test()} \{ status()}
                     """;
         }
     }
@@ -62,7 +62,8 @@ public class AdventOfCode2023 {
      */
     public static void main(String[] args) {
         Stream.of(Day1.find(), Day2.findPart1(), Day2.findPart2(), Day3.findPart1(), Day3.findPart2(), Day4.findPart1(),
-                        Day4.findPart2(), Day5.findPart1(), Day5.findPart2(), Day6.findPart1(), Day6.findPart2())
+                        Day4.findPart2(), Day5.findPart1(), Day5.findPart2(), Day6.findPart1(), Day6.findPart2(),
+                        Day7.findPart1(), Day7.findPart2())
                 .map(SolutionOfDay::message)
                 .forEach(System.out::print);
     }
