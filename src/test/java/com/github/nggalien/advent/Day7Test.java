@@ -18,12 +18,16 @@ class Day7Test {
 
     @ParameterizedTest
     @MethodSource("bets")
-    void testTotalWining(String input, long expectedTotalWining) {
+    void testTotalWiningPart1(String input, long expectedTotalWiningPart1, long expectedTotalWiningPart2) {
         //Given
         //When
-        long actualTotalWining = Day7.totalWiningPart1(input);
+        long actualTotalWiningPart1 = Day7.totalWiningPart(input, AdventOfCode2023.DayPart.ONE);
         //Then
-        assertEquals(expectedTotalWining, actualTotalWining, STR."Total wining should be \{expectedTotalWining}");
+        assertEquals(expectedTotalWiningPart1, actualTotalWiningPart1, STR."Total wining should be \{expectedTotalWiningPart1}");
+        //When
+        long actualTotalWiningPart2 = Day7.totalWiningPart(input, AdventOfCode2023.DayPart.TWO);
+        //Then
+        assertEquals(expectedTotalWiningPart2, actualTotalWiningPart2, STR."Total wining should be \{expectedTotalWiningPart2}");
     }
 
     static Stream<Arguments> bets() {
@@ -34,8 +38,8 @@ class Day7Test {
                         KK677 28
                         KTJJT 220
                         QQQJA 483
-                        """, 6440L),
-                Arguments.of(readFileOfResource("day7.txt"), 248812215L),
+                        """, 6440L, 5905L),
+                Arguments.of(readFileOfResource("day7.txt"), 248812215L, 250057090L),
                 null
         ).filter(Objects::nonNull);
     }
@@ -45,7 +49,7 @@ class Day7Test {
     void testParseHand(String input, Hand expectedHand) {
         //Given
         //When
-        Hand actualHand = Hand.parseFromStrPart1(input);
+        Hand actualHand = Hand.parseFromStr(input, false);
         //Then
         assertEquals(expectedHand, actualHand, STR."Hand should be \{expectedHand}");
     }
@@ -72,13 +76,6 @@ class Day7Test {
                         Card.of('K'),
                         Card.of('K'),
                         Card.of('K')
-                ))),
-                Arguments.of("24356", new Day7.Straight(List.of(
-                        Card.of('2'),
-                        Card.of('4'),
-                        Card.of('3'),
-                        Card.of('5'),
-                        Card.of('6')
                 ))),
                 Arguments.of("AAKQA", new Day7.ThreeOfAKind(List.of(
                         Card.of('A'),
@@ -131,17 +128,16 @@ class Day7Test {
 
     @Test
     void testHandOrder() {
-        greaterThan(Hand.parseFromStrPart1("AAAAA"), Hand.parseFromStrPart1("2AAAA"));
-        greaterThan(Hand.parseFromStrPart1("2AAAA"), Hand.parseFromStrPart1("AAKKK"));
-        greaterThan(Hand.parseFromStrPart1("AAKKK"), Hand.parseFromStrPart1("24356"));
-        greaterThan(Hand.parseFromStrPart1("24356"), Hand.parseFromStrPart1("AAKQA"));
-        greaterThan(Hand.parseFromStrPart1("AAKQA"), Hand.parseFromStrPart1("AAJKJ"));
-        greaterThan(Hand.parseFromStrPart1("AAJKJ"), Hand.parseFromStrPart1("AAKJQ"));
-        greaterThan(Hand.parseFromStrPart1("AAKJQ"), Hand.parseFromStrPart1("AJ358"));
+        greaterThan(Hand.parseFromStr("AAAAA", false), Hand.parseFromStr("2AAAA", false));
+        greaterThan(Hand.parseFromStr("2AAAA", false), Hand.parseFromStr("AAKKK", false));
+        greaterThan(Hand.parseFromStr("AAKKK", false), Hand.parseFromStr("24356", false));
+        greaterThan(Hand.parseFromStr("AAKQA", false), Hand.parseFromStr("AAJKJ", false));
+        greaterThan(Hand.parseFromStr("AAJKJ", false), Hand.parseFromStr("AAKJQ", false));
+        greaterThan(Hand.parseFromStr("AAKJQ", false), Hand.parseFromStr("AJ358", false));
         //Day1
-        greaterThan(Hand.parseFromStrPart1("33332"), Hand.parseFromStrPart1("2AAAA"));
-        greaterThan(Hand.parseFromStrPart1("77888"), Hand.parseFromStrPart1("77788"));
-        greaterThan(Hand.parseFromStrPart1("KK677"), Hand.parseFromStrPart1("KTJJT"));
+        greaterThan(Hand.parseFromStr("33332", false), Hand.parseFromStr("2AAAA", false));
+        greaterThan(Hand.parseFromStr("77888", false), Hand.parseFromStr("77788", false));
+        greaterThan(Hand.parseFromStr("KK677", false), Hand.parseFromStr("KTJJT", false));
     }
 
     static void greaterThan(Hand hand1, Hand hand2) {

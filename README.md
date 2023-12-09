@@ -13,7 +13,7 @@ Obviously, `Copilot` is ~~not~~ allowed to help for ~~figuring out~~ writing the
 [Advent of Code](https://adventofcode.com/) is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like.
 
 * **Language**: Java 21 with preview features enabled
-* **Days Completed**: 3
+* **Days Completed**: 7
 
 
 * **Day 1**: [Trebuchet?!](#day-1-trebuchet)
@@ -36,7 +36,7 @@ Obviously, `Copilot` is ~~not~~ allowed to help for ~~figuring out~~ writing the
   - [X] [Part 2](#part-2-5)
 * **Day 7**: [Camel Cards](#day-7-camel-cards)
   - [X] [Part 1](#part-1-6)
-  - [ ] [Part 2](#part-2-6)
+  - [X] [Part 2](#part-2-6)
 
 ## Day 1: Trebuchet?!
 

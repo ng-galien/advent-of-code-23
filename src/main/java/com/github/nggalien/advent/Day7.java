@@ -11,27 +11,31 @@ import static com.github.nggalien.advent.AdventOfCode2023.readFileOfResource;
 
 public interface Day7 {
 
-    record Card(char symbol, int score) implements Comparable<Card> {
+    record Card(char symbol, int score, boolean joker) implements Comparable<Card> {
         @Override
         public int compareTo(Card o) {
             return Integer.compare(score, o.score);
         }
 
-        static Card fromCodePoint(int codePoint) {
+        static Card fromCodePoint(int codePoint, boolean joker) {
             var symbol = Character.toChars(codePoint)[0];
-            return of(symbol);
+            return of(symbol, joker);
         }
 
-        static Card of(char symbol) {
+        static Card of(char symbol, boolean joker) {
             int score = switch (symbol) {
                 case 'A' -> 14;
                 case 'K' -> 13;
                 case 'Q' -> 12;
-                case 'J' -> 11;
+                case 'J' -> joker ? 1 : 11;
                 case 'T' -> 10;
                 default -> symbol - '0';
             };
-            return new Card(symbol, score);
+            return new Card(symbol, score, joker);
+        }
+
+        static Card of(char symbol) {
+            return of(symbol, false);
         }
 
     }
@@ -56,50 +60,66 @@ public interface Day7 {
             return 0;
         }
 
-        static Hand parseFromStrPart1(String str) {
+        static Hand parseFromStr(String str, boolean joker) {
             var cards = str.chars()
-                    .mapToObj(Card::fromCodePoint).toList();
+                    .mapToObj(value -> Card.fromCodePoint(value, joker))
+                    .toList();
             if (cards.size() != 5) {
                 throw new IllegalArgumentException("A hand should have 5 cards");
             }
+            long jokerCount = cards.stream()
+                    .filter(card -> card.symbol() == 'J')
+                    .count();
+            if (!joker) {
+                jokerCount = 0;
+            }
             Map<Card, List<Card>> cardsByScore = cards.stream()
                     .collect(Collectors.groupingBy(Function.identity()));
-            if (cardsByScore.size() == 1) {
+            int cardByScoreSize = cardsByScore.size();
+            var cardCounts = cardsByScore.values().stream()
+                    .mapToInt(List::size)
+                    .sorted()
+                    .toArray();
+            if (cardByScoreSize == 1) {
                 return new FiveOfAKind(cards);
-            } else if (cardsByScore.size() == 2) {
-                var cardCounts = cardsByScore.values().stream()
-                        .mapToInt(List::size)
-                        .sorted()
-                        .toArray();
+            } else if (cardByScoreSize == 2) {
+
                 if (Arrays.equals(cardCounts, new int[]{1, 4})) {
+                    if (jokerCount == 1|| jokerCount == 4) {
+                        return new FiveOfAKind(cards);
+                    }
                     return new FourOfAKind(cards);
                 }
                 if (Arrays.equals(cardCounts, new int[]{2, 3})) {
+                    if (jokerCount == 2|| jokerCount == 3) {
+                        return new FiveOfAKind(cards);
+                    }
                     return new FullHouse(cards);
                 }
-            }else if (cardsByScore.size() == 3) {
-                var cardCounts = cardsByScore.values().stream()
-                        .mapToInt(List::size)
-                        .sorted()
-                        .toArray();
+            } else if (cardByScoreSize == 3) {
                 if (Arrays.equals(cardCounts, new int[]{1, 1, 3})) {
+                    if (jokerCount == 1 || jokerCount == 3) {
+                        return new FourOfAKind(cards);
+                    }
                     return new ThreeOfAKind(cards);
                 }
                 if (Arrays.equals(cardCounts, new int[]{1, 2, 2})) {
+                    if (jokerCount == 1) {
+                        return new FullHouse(cards);
+                    }
+                    if (jokerCount == 2) {
+                        return new FourOfAKind(cards);
+                    }
                     return new TwoPairs(cards);
                 }
             } else if (cardsByScore.size() == 4) {
-                return new OnePair(cards);
-            } else if (cardsByScore.size() == 5) {
-                var cardScores = cards.stream()
-                        .mapToInt(Card::score)
-                        .sorted()
-                        .toArray();
-                var isStraight = IntStream.range(0, 4)
-                        .allMatch(i -> cardScores[i] + 1 == cardScores[i + 1]);
-                if (isStraight) {
-                    return new Straight(cards);
+                if (jokerCount == 1 || jokerCount == 2) {
+                    return new ThreeOfAKind(cards);
                 }
+                return new OnePair(cards);
+            }
+            if (jokerCount == 1) {
+                return new OnePair(cards);
             }
             return new HighCard(cards);
         }
@@ -126,48 +146,41 @@ public interface Day7 {
         }
     }
 
-    record Straight(List<Card> cards) implements Hand {
+    record ThreeOfAKind(List<Card> cards) implements Hand {
         @Override
         public int score() {
             return 4;
         }
     }
 
-    record ThreeOfAKind(List<Card> cards) implements Hand {
+    record TwoPairs(List<Card> cards) implements Hand {
         @Override
         public int score() {
             return 3;
         }
     }
 
-    record TwoPairs(List<Card> cards) implements Hand {
+    record OnePair(List<Card> cards) implements Hand {
         @Override
         public int score() {
             return 2;
         }
     }
 
-    record OnePair(List<Card> cards) implements Hand {
+    record HighCard(List<Card> cards) implements Hand {
         @Override
         public int score() {
             return 1;
         }
     }
 
-    record HighCard(List<Card> cards) implements Hand {
-        @Override
-        public int score() {
-            return 0;
-        }
-    }
-
     record Bet(Hand hand, int bid) implements Comparable<Bet> {
-        static Bet parseFromStrPart1(String str) {
+        static Bet parseFromStr(String str, boolean joker) {
             var parts = str.split(" ");
             if (parts.length != 2) {
                 throw new IllegalArgumentException("A bet should have a hand and a bid");
             }
-            var hand = Hand.parseFromStrPart1(parts[0].trim());
+            var hand = Hand.parseFromStr(parts[0].trim(), joker);
             var bid = Integer.parseInt(parts[1].trim());
             return new Bet(hand, bid);
         }
@@ -178,9 +191,10 @@ public interface Day7 {
         }
     }
 
-    static long totalWiningPart1(String input) {
+    static long totalWiningPart(String input, AdventOfCode2023.DayPart part) {
+        boolean joker = part == AdventOfCode2023.DayPart.TWO;
         List<Bet> bets = input.lines()
-                .map(Bet::parseFromStrPart1)
+                .map(s -> Bet.parseFromStr(s, joker))
                 .sorted()
                 .toList();
         long result = 0;
@@ -196,7 +210,7 @@ public interface Day7 {
 
         @Override
         public int day() {
-            return 6;
+            return 7;
         }
 
         @Override
@@ -212,7 +226,7 @@ public interface Day7 {
         @Override
         public Long test() {
             var input = readFileOfResource("day7.txt");
-            return Day7.totalWiningPart1(input);
+            return Day7.totalWiningPart(input, part());
         }
     }
 
@@ -220,7 +234,7 @@ public interface Day7 {
 
         @Override
         public int day() {
-            return 6;
+            return 7;
         }
 
         @Override
@@ -230,12 +244,13 @@ public interface Day7 {
 
         @Override
         public Long rightAnswer() {
-            return 0L;
+            var input = readFileOfResource("day7.txt");
+            return Day7.totalWiningPart(input, part());
         }
 
         @Override
         public Long test() {
-            return -1L;
+            return 250057090L;
         }
     }
 
