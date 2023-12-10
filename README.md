@@ -13,7 +13,7 @@ Obviously, `Copilot` is ~~not~~ allowed to help for ~~figuring out~~ writing the
 [Advent of Code](https://adventofcode.com/) is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like.
 
 * **Language**: Java 21 with preview features enabled
-* **Days Completed**: 7
+* **Days Completed**: 9
 
 
 * **Day 1**: [Trebuchet?!](#day-1-trebuchet)
@@ -40,6 +40,9 @@ Obviously, `Copilot` is ~~not~~ allowed to help for ~~figuring out~~ writing the
 * **Day 8**: [Haunted Wasteland](#day-8-haunted-wasteland)
   - [X] [Part 1](#part-1-7)
   - [X] [Part 2](#part-2-7)
+* **Day 9**: [Mirage Maintenance](#day-9-mirage-maintenance)
+  - [X] [Part 1](#part-1-8)
+  - [X] [Part 2](#part-2-8)
 
 ## Day 1: Trebuchet?!
 
