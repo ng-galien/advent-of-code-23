@@ -37,6 +37,9 @@ Obviously, `Copilot` is ~~not~~ allowed to help for ~~figuring out~~ writing the
 * **Day 7**: [Camel Cards](#day-7-camel-cards)
   - [X] [Part 1](#part-1-6)
   - [X] [Part 2](#part-2-6)
+* **Day 8**: [Haunted Wasteland](#day-8-haunted-wasteland)
+  - [X] [Part 1](#part-1-7)
+  - [X] [Part 2](#part-2-7)
 
 ## Day 1: Trebuchet?!
 
