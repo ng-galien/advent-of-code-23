@@ -1,9 +1,7 @@
 package com.github.nggalien.advent;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static com.github.nggalien.advent.AdventOfCode2023.readFileOfResource;
 import static com.github.nggalien.advent.DayUtils.columnsOfInput;
@@ -42,6 +40,25 @@ public interface Day13 {
         }
         return res;
     }
+
+
+    static int numSameWithOneDifferent(long[] big, long[] small) {
+        boolean canBeDifferent = true;
+        int res = 0;
+        for (int i = 0; i < small.length; i++) {
+            if (big[i] == small[i]) {
+                res++;
+                continue;
+            }
+            long xor = big[i] ^ small[i];
+            if (xor != 0 && (xor & (xor - 1)) == 0 && canBeDifferent) {
+                canBeDifferent = false;
+                res++;
+            }
+        }
+        return !canBeDifferent ? res : -1;
+    }
+
     static boolean isSymmetric(long[] ls, int splitIndex) {
         var split = splitInTwoParts(ls, splitIndex);
         long[] big = split[0];
@@ -50,11 +67,24 @@ public interface Day13 {
         return numSame == small.length;
     }
 
+    static boolean isSymmetricWithOneDifferent(long[] ls, int splitIndex) {
+        var split = splitInTwoParts(ls, splitIndex);
+        long[] big = split[0];
+        long[] small = split[1];
+        int numSame = numSameWithOneDifferent(big, small);
+        return numSame == small.length;
+    }
+
+
     static IntStream findSymmetric(long[] ls) {
         return IntStream.range(1, ls.length).filter(i -> isSymmetric(ls, i));
     }
 
-    static long solvesPattern(String input) {
+    static IntStream findSymmetricWithOneDifferent(long[] ls) {
+        return IntStream.range(1, ls.length).filter(i -> isSymmetricWithOneDifferent(ls, i)).findFirst().stream();
+    }
+
+    static long solvesPatternSymmetric(String input) {
         long[] hs = columnsOfInput(input).stream().mapToLong(
                 s -> convertBinary(s, c -> c == '#')
         ).toArray();
@@ -65,11 +95,29 @@ public interface Day13 {
                 + findSymmetric(vs).map(i -> i * 100).sum();
     }
 
-    static long solvesDay(String input) {
+    static long solvesPatternSymmetricButOneDifferent(String input) {
+        long[] hs = columnsOfInput(input).stream().mapToLong(
+                s -> convertBinary(s, c -> c == '#')
+        ).toArray();
+        long[] vs = linesOfInput(input).stream().mapToLong(
+                s -> convertBinary(s, c -> c == '#')
+        ).toArray();
+        return findSymmetricWithOneDifferent(hs).sum()
+                + findSymmetricWithOneDifferent(vs).map(i -> i * 100).sum();
+    }
+
+    static long solvesDay1(String input) {
         //Patterns are separated by a blank line
         String[] parts = input.split("\n\n");
-        return Arrays.stream(parts).mapToLong(Day13::solvesPattern).sum();
+        return Arrays.stream(parts).mapToLong(Day13::solvesPatternSymmetric).sum();
     }
+
+    static long solvesDay2(String input) {
+        //Patterns are separated by a blank line
+        String[] parts = input.split("\n\n");
+        return Arrays.stream(parts).mapToLong(Day13::solvesPatternSymmetricButOneDifferent).sum();
+    }
+
     record Part1() implements Day13, AdventOfCode2023.SolutionOfDay<Long> {
 
         @Override
@@ -90,7 +138,7 @@ public interface Day13 {
         @Override
         public Long test() {
             var input = readFileOfResource("day13.txt");
-            return solvesDay(input);
+            return solvesDay1(input);
         }
     }
 
@@ -108,13 +156,13 @@ public interface Day13 {
 
         @Override
         public Long rightAnswer() {
-            return 0L;
+            return 37453L;
         }
 
         @Override
         public Long test() {
             var input = readFileOfResource("day13.txt");
-            return -1L;
+            return solvesDay2(input);
         }
     }
 

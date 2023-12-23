@@ -14,11 +14,16 @@ class Day13Test {
 
     @ParameterizedTest(name = "testParts: {0}")
     @MethodSource("data")
-    void testDay(String input, long expectedPart1) {
+    void testDay(String input, long expectedPart1, long expectedPart2) {
         //When
-        long result = Day13.solvesDay(input);
+        long day13Part1 = Day13.solvesDay1(input);
         //Then
-        assertEquals(expectedPart1, result, "Part 1");
+        assertEquals(expectedPart1, day13Part1, "Day13 Part1 failed");
+
+        //When
+        long day13Part2 = Day13.solvesDay2(input);
+        //Then
+        assertEquals(expectedPart2, day13Part2, "Day13 Part2 failed");
     }
 
     static Stream<Arguments> data() {
@@ -31,7 +36,7 @@ class Day13Test {
                         ..#.##.#.
                         ..##..##.
                         #.#.##.#.
-                        """, 5),
+                        """, 5, 300),
                 Arguments.of("""
                         #...##..#
                         #....#..#
@@ -40,7 +45,7 @@ class Day13Test {
                         #####.##.
                         ..##..###
                         #....#..#
-                        """, 400),
+                        """, 400, 100),
                 Arguments.of("""
                         #.##..##.
                         ..#.##.#.
@@ -57,7 +62,7 @@ class Day13Test {
                         #####.##.
                         ..##..###
                         #....#..#
-                        """, 405),
+                        """, 405, 400),
                 Arguments.of("""
                         #.#.###
                         #.#####
@@ -74,8 +79,8 @@ class Day13Test {
                         ##.##.#
                         .#####.
                         .....#.
-                        """, 500),
-                Arguments.of(readFileOfResource("day13.txt"), 29213),
+                        """, 500, 100),
+                Arguments.of(readFileOfResource("day13.txt"), 29213, 37453),
                 null
         ).filter(Objects::nonNull);
     }
